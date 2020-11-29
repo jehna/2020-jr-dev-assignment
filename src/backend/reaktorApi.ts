@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { DOMParser } from 'xmldom';
-import { Product, ManufacturerAvailabilities } from './types';
+import { Product, ManufacturerAvailabilities } from '../shared/types';
 
 const BASE_URL = 'https://bad-api-assignment.reaktor.com';
 

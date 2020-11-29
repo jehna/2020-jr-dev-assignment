@@ -2,7 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser';
 import path from 'path';
 import apicache from 'apicache';
-import { Item } from './types';
+import { Item } from '../shared/types';
 import { getProductsFor, getManufacturers, getAvailabilitiesFor } from './reaktorApi';
 
 const buildDir = path.join(process.cwd() + '/build');
