@@ -1,11 +1,13 @@
 import express from 'express'
 import bodyParser from 'body-parser';
 import path from 'path';
+import apicache from 'apicache';
 import { Item } from './types';
 import { getProductsFor, getManufacturers, getAvailabilitiesFor } from './reaktorApi';
 
 const buildDir = path.join(process.cwd() + '/build');
 const app = express();
+const cache = apicache.middleware;
 
 app.use(bodyParser.json());
 app.use(
@@ -21,7 +23,8 @@ app.get('/', function (req, res) {
 app.get('/ping', function(req, res) {
   res.json('pong');
 });
-app.get('/api', async function(req, res, next) {
+// WITH CACHING NOW
+app.get('/api', cache('5 minutes'), async function(req, res, next) {
   const items = new Map<string, Item>();
   const categories = ['shirts', 'jackets', 'accessories'];
 
@@ -32,6 +35,7 @@ app.get('/api', async function(req, res, next) {
     products.forEach(product => items.set(product.id, product));
   } catch (e) {
     console.log(`Error fetching products: ${e}`);
+    return res.json(500).json('Internal server error');
     next();
   }
 
@@ -50,6 +54,7 @@ app.get('/api', async function(req, res, next) {
     });
   } catch (e) {
     console.log(`Error setting availabilities: ${e}`);
+    res.json(500).json('Internal server error');
     next();
   }
 
