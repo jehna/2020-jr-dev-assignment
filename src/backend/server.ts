@@ -58,7 +58,7 @@ app.get('/api', cache('5 minutes'), async function(req, res, next) {
   res.json([...items.values()]);
 });
 
-const port = 3001;
+const port = process.env.PORT || 3001;
 console.log('checking port', port);
 app.listen(port, () => {
   console.log(`Server now listening on port: ${port}`);
