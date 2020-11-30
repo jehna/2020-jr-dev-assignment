@@ -8,8 +8,8 @@ interface ItemsTableProps {
 
 export default function ItemsTable(props: ItemsTableProps) {
   return (
-    <Table striped bordered hover responsive='md'>
-      <thead>
+    <Table striped hover responsive='sm'>
+      <thead className='thead-dark' >
         <tr>
           <th>Name</th>
           <th>Category</th>
@@ -40,7 +40,7 @@ function renderItem(item: Item) {
 
 function renderStock(n: number | undefined) {
   let [text, variant] = ['N/A', 'info'];
-  if (n) {
+  if (n !== undefined) {
     switch(n) {
       case 2: 
         text = 'In stock';
