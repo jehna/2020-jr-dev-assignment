@@ -1,9 +1,9 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import pingReducer from './pingSlice';
+import data from './data';
 
 export const store = configureStore({
   reducer: {
-    ping: pingReducer
+    data,
   },
   devTools: true,
 });
