@@ -7,7 +7,9 @@ import { getProductsFor, getManufacturers, getAvailabilitiesFor } from './reakto
 
 const buildDir = path.join(process.cwd() + '/build');
 const app = express();
-const cache = apicache.middleware;
+const cache = apicache
+  .options({statusCodes: {include: [200]}})
+  .middleware;
 
 app.use(bodyParser.json());
 app.use(
