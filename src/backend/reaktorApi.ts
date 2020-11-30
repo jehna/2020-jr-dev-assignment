@@ -5,14 +5,12 @@ import { Product, ManufacturerAvailabilities } from '../shared/types';
 const BASE_URL = 'https://bad-api-assignment.reaktor.com';
 
 export async function getProductsFor(type: string) {
-  const response = await fetch(`${BASE_URL}/products/${type}`);
-  let result;
   try {
-    result = await response.json() as Product[];
+    const response = await fetch(`${BASE_URL}/products/${type}`);
+    return await response.json() as Product[];
   } catch (e) {
     throw new Error(`Error parsing ${type}: ${e}`);
   }
-  return result;
 }
 
 export function getManufacturers(products: Product[]) {
@@ -23,22 +21,17 @@ export function getManufacturers(products: Product[]) {
 }
 
 export async function getAvailabilitiesFor(manufacturer: string) {
-  const response = await fetch(`${BASE_URL}/availability/${manufacturer}`);
-  let result;
   try {
-    result = await response.json() as ManufacturerAvailabilities;
+    const response = await fetch(`${BASE_URL}/availability/${manufacturer}`);
+    const result = await response.json() as ManufacturerAvailabilities;
+    return result.response.map(({ id, DATAPAYLOAD }) => {
+      const idLowerCase = id.toLowerCase();
+      const availability = getAvailability(DATAPAYLOAD);
+      return { id: idLowerCase, stock: availability };
+    });
   } catch (e) {
-    throw new Error(`Unable to parse ${manufacturer}'s availabilities: ${e}`);
+    throw new Error(`Error fetching ${manufacturer}'s availabilities: ${e}`);
   }
-  if (result.code !== 200) {
-    throw new Error(`Unable to fetch ${manufacturer}'s availabilities: bad status code ${response.status}`);
-  }
-  const ret = result.response.map(({ id, DATAPAYLOAD }) => {
-    const idLowerCase = id.toLowerCase();
-    const availability = getAvailability(DATAPAYLOAD);
-    return { id: idLowerCase, stock: availability };
-  });
-  return ret;
 }
 
 function getAvailability(payload: string) {

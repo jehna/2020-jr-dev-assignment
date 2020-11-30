@@ -20,9 +20,7 @@ app.use(express.static(buildDir));
 app.get('/', function (req, res) {
   res.sendFile(path.join(buildDir, 'index.html'));
 });
-app.get('/ping', function(req, res) {
-  res.json('pong');
-});
+
 // WITH CACHING NOW
 app.get('/api', cache('5 minutes'), async function(req, res, next) {
   const items = new Map<string, Item>();
@@ -36,7 +34,6 @@ app.get('/api', cache('5 minutes'), async function(req, res, next) {
   } catch (e) {
     console.log(`Error fetching products: ${e}`);
     return res.json(500).json('Internal server error');
-    next();
   }
 
   // Fetch all availabilities and merge
@@ -55,7 +52,6 @@ app.get('/api', cache('5 minutes'), async function(req, res, next) {
   } catch (e) {
     console.log(`Error setting availabilities: ${e}`);
     res.json(500).json('Internal server error');
-    next();
   }
 
   // Finally, send all items as a list
