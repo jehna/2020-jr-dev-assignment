@@ -40,6 +40,7 @@
     "xmldom": "^0.4.0"
   },
   "scripts": {
+    "prod": "yarn build && node build/server.js",
     "build": "yarn build:frontend && yarn build:backend",
     "build:frontend": "react-scripts build",
     "build:backend": "webpack --config webpack.config.server.js",
